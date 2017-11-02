@@ -9,6 +9,7 @@ import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import Recover from './components/recover.js';
 
 const style = {
     paper: {
@@ -66,6 +67,9 @@ class App extends Component {
             />
         </div>
             <RaisedButton labelColor='#fff' backgroundColor="#46246a" label="Register" style={style.button} />
+            </Paper>
+            <Paper>
+              <Recover />
             </Paper>
         </MuiThemeProvider>
       </div>
