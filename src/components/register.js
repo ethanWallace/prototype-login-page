@@ -6,6 +6,8 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import Paper from 'material-ui/Paper';
+import { Link } from 'react-router-dom';
 
 const style = {
     paper: {
@@ -18,25 +20,75 @@ const style = {
     },
     button: {
         marginTop: 10,
+    },
+    textfield: {
+      width: '100%'
     }
 };
 
+const organizationTextField = (
+  <TextField style={style.textfield} floatingLabelText="Organization" />
+)
+
+const institutionDropDown = (
+  <SelectField floatingLabelText="Institution" style={style.textfield}>
+    <MenuItem value={'University'} primaryText="University" />
+    <MenuItem value={'College'} primaryText="College" />
+  </SelectField>
+)
+
+const provinceDropDown = (
+  <SelectField floatingLabelText="Province/Territory" style={style.textfield}>
+    <MenuItem value={'Ontario'} primaryText="Ontario" />
+    <MenuItem value={'Quebec'} primaryText="Quebec" />
+    <MenuItem value={'PEI'} primaryText="Prince Edward Island" />
+  </SelectField>
+)
+
+const departmentDropDown = (
+  <SelectField floatingLabelText="Department" style={style.textfield}>
+    <MenuItem value={'TBS'} primaryText="Treasury Board of Canada" />
+  </SelectField>
+)
+
+const extraFields = {
+  1: [institutionDropDown],
+  2: [institutionDropDown],
+  3: [departmentDropDown],
+  4: [provinceDropDown],
+  5: [provinceDropDown],
+  6: [organizationTextField],
+  7: [organizationTextField],
+  8: [organizationTextField],
+  9: [organizationTextField],
+  10: [organizationTextField],
+  11: [departmentDropDown],
+  12: [organizationTextField],
+}
+
+
 class Register extends React.Component {
-  state = {
-      value: 1,
-    };
-  handleChange = (event, index, value) => this.setState({value});
+  constructor(props) {
+    super(props)
+    this.state = {
+      userType: 1
+    }
+  }
+
+  handleChange = (event, index, value) => this.setState({userType: value});
+
    render() {
       return (
          <div>
          <MuiThemeProvider>
 
+         <h1>Register</h1>
          <div>
              <SelectField
              floatingLabelText="Occupation"
-             value={this.state.value}
-             onChange={this.handleChange}
-             >
+             style={style.textfield}
+             value={this.state.userType}
+             onChange={this.handleChange}>
                <MenuItem value={1} primaryText="Academic" />
                <MenuItem value={2} primaryText="Student" />
                <MenuItem value={3} primaryText="Federal Government" />
@@ -51,16 +103,20 @@ class Register extends React.Component {
                <MenuItem value={12} primaryText="Other" />
              </SelectField>
 
-             <TextField floatingLabelText="Display Name" />
+             {extraFields[this.state.userType]}
 
-             <TextField  floatingLabelText="Enter your email" />
-             <TextField floatingLabelText="Confirm your email" />
+             <TextField style={style.textfield} floatingLabelText="Display Name" />
 
-             <TextField floatingLabelText="Password" />
-             <TextField  floatingLabelText="Confirm your password" />
+             <TextField style={style.textfield} floatingLabelText="Enter your email" />
+             <TextField style={style.textfield} floatingLabelText="Confirm your email" />
+
+             <TextField style={style.textfield} floatingLabelText="Password" />
+             <TextField style={style.textfield} floatingLabelText="Confirm your password" />
          </div>
 
-         <RaisedButton primary={true} label="Register" style={style.button} />
+         <RaisedButton primary={true} fullWidth={true} label="Register" style={style.button} />
+
+         <Link to="./login">Go back to sign in</Link>
 
          </MuiThemeProvider>
          </div>
