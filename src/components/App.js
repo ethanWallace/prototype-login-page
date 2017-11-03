@@ -12,8 +12,10 @@ import MenuItem from 'material-ui/MenuItem';
 import { withRouter } from 'react-router';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Register from './register';
+
 import Login from './login';
 import Recover from './recover';
+
 
 class App extends Component {
   render() {
@@ -27,8 +29,10 @@ class App extends Component {
 
 
             <Route exact path='/register' component={Register} />
+
 <Route exact path='/login' component={Login} />
 <Route exact path='/recover' component={Recover} />
+
           </Switch>
         </MuiThemeProvider>
       </div>
