@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from '../logo.svg';
 import '../App.css';
 
 import ReactDOM from 'react-dom';
@@ -13,7 +12,11 @@ import MenuItem from 'material-ui/MenuItem';
 import { withRouter } from 'react-router';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Register from './register';
+
+import Login from './login';
 import Recover from './recover';
+
+
 class App extends Component {
   render() {
     return (
@@ -22,11 +25,14 @@ class App extends Component {
         
             
   <Switch>
-           <Route exact path='/' render={() => <Redirect to='/register' />} />
-: <Route exact path='/' render={() => <Redirect to='/register' />} />
+           <Route exact path='/' render={() => <Redirect to='/login' />} />
+
 
             <Route exact path='/register' component={Register} />
-            <Route exact path='/recover' component={Recover} />
+
+<Route exact path='/login' component={Login} />
+<Route exact path='/recover' component={Recover} />
+
           </Switch>
         </MuiThemeProvider>
       </div>
