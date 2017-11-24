@@ -3,11 +3,10 @@ import '../App.css';
 
 import CanadaBanner from '../img/govt-of-canada-logo.png';
 
-import ReactDOM from 'react-dom';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import purple from 'material-ui/colors/purple';
 import Paper from 'material-ui/Paper';
 
-import { withRouter } from 'react-router';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Register from './register';
 
@@ -17,7 +16,7 @@ import Recover from './recover';
 const style = {
     paper: {
       height: 'auto',
-      width: 450,
+      width: 400,
       margin: 20,
       padding: 15,
       textAlign: 'left',
@@ -31,13 +30,19 @@ const style = {
     }
 };
 
+const theme = createMuiTheme({
+  palette: {
+    primary: purple,
+  },
+});
+
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <MuiThemeProvider>
+        <MuiThemeProvider theme={theme}>
 
-        <Paper style={style.paper} zDepth={2}>
+        <Paper style={style.paper} elevation={2}>
          <img src={CanadaBanner} alt="Government of Canada" />
         <Switch>
            <Route exact path='/' render={() => <Redirect to='/login' />} />

@@ -1,27 +1,30 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import Button from 'material-ui/Button';
+import Input, { InputLabel } from 'material-ui/Input';
+import { MenuItem } from 'material-ui/Menu';
+import { FormControl } from 'material-ui/Form';
+import Select from 'material-ui/Select';
 import { Link } from 'react-router-dom';
 
 const style = {
-    paper: {
-      minHeight: 400,
-      width: 450,
-      margin: 20,
-      padding: 10,
-      textAlign: 'left',
-      display: 'inline-block',
+    loginHolder:{
+      margin: 20
     },
     button: {
         marginTop: 10,
     },
     textfield: {
+      width: '100%',
+      marginBottom: 10
+    },
+    formControl: {
       width: '100%'
+    },
+    link: {
+      marginTop: '10px',
+      display: 'block'
     }
 };
 
@@ -34,27 +37,26 @@ class Register extends React.Component {
   }
    render() {
       return (
-         <div>
-         <MuiThemeProvider>
-         <div>
+         <div style={style.loginHolder}>
             <h1>Register</h1>
+             <form>
+               <FormControl style={style.formControl}>
+                 <OccupationDropdown/>
 
-             <OccupationDropdown/>
+                 <TextField fullWidth={true} id="name" label="Name" style={style.textfield} helperText="Please enter your first and last name, as you are known in the workplace/school. As per the Terms and Conditions, your display name must reflect your real name. Pseudonyms are not allowed."/>
 
-             <TextField style={style.textfield} floatingLabelText="Display Name" />
+                 <TextField fullWidth={true} id="email" label="Enter your email" style={style.textfield}  />
+                 <TextField fullWidth={true} id="confirm-email" label="Confirm your email" style={style.textfield} />
 
-             <TextField style={style.textfield} floatingLabelText="Enter your email" />
-             <TextField style={style.textfield} floatingLabelText="Confirm your email" />
+                 <TextField fullWidth={true} id="password" label="Password" style={style.textfield} />
+                 <TextField fullWidth={true} id="confirm-password" label="Confirm your password" style={style.textfield} />
 
-             <TextField style={style.textfield} floatingLabelText="Password" />
-             <TextField style={style.textfield} floatingLabelText="Confirm your password" />
-
-
-            <RaisedButton primary={true} fullWidth={true} label="Register" style={style.button} />
-
-            <Link to="./login">Go back to sign in</Link>
-         </div>
-         </MuiThemeProvider>
+                <Button raised color="primary" style={style.button}>
+                  Register
+                </Button>
+              </FormControl>
+            </form>
+            <Link style={style.link} to="./login">Go back to sign in</Link>
          </div>
       );
    }
@@ -67,11 +69,13 @@ class OccupationDropdown extends React.Component {
       userType: 1,
     }
   }
-  handleChange = (event, index, value) => this.setState({userType: value});
+  handleChange = name => event => {
+    this.setState({ [name]: event.target.value });
+  };
   render() {
 
     const organizationTextField = (
-      <TextField style={style.textfield} floatingLabelText="Organization" />
+      <TextField id="organization" label="Organization" style={style.textfield} />
     )
 
     const extraFields = {
@@ -91,25 +95,27 @@ class OccupationDropdown extends React.Component {
 
     return (
       <div>
-        <SelectField
-          floatingLabelText="Occupation"
+      <FormControl style={style.formControl}>
+        <InputLabel htmlFor="occupation">Occupation</InputLabel>
+        <Select
           style={style.textfield}
           value={this.state.userType}
-          onChange={this.handleChange}>
-            <MenuItem value={1} primaryText="Academic" />
-            <MenuItem value={2} primaryText="Student" />
-            <MenuItem value={3} primaryText="Federal Government" />
-            <MenuItem value={4} primaryText="Provincal/Territorial Government" />
-            <MenuItem value={5} primaryText="Municipal Government" />
-            <MenuItem value={6} primaryText="International/Foreign Government" />
-            <MenuItem value={7} primaryText="Non-Government Organization" />
-            <MenuItem value={8} primaryText="Community/Non-profit" />
-            <MenuItem value={9} primaryText="Business" />
-            <MenuItem value={10} primaryText="Media" />
-            <MenuItem value={11} primaryText="Retired Public Servant" />
-            <MenuItem value={12} primaryText="Other" />
-        </SelectField>
-
+          onChange={this.handleChange('userType')}
+          input={<Input id="occupation" />}>
+            <MenuItem value={1} >Academic </MenuItem>
+            <MenuItem value={2} >Student</MenuItem>
+            <MenuItem value={3} >Federal Government</MenuItem>
+            <MenuItem value={4} >Provincal/Territorial Government</MenuItem>
+            <MenuItem value={5} >Municipal Government</MenuItem>
+            <MenuItem value={6} >International/Foreign Government</MenuItem>
+            <MenuItem value={7} >Non-Government Organization</MenuItem>
+            <MenuItem value={8} >Community/Non-profit</MenuItem>
+            <MenuItem value={9} >Business</MenuItem>
+            <MenuItem value={10} >Media</MenuItem>
+            <MenuItem value={11} >Retired Public Servant</MenuItem>
+            <MenuItem value={12} >Other</MenuItem>
+        </Select>
+      </FormControl>
         {extraFields[this.state.userType]}
       </div>
     )
@@ -131,33 +137,50 @@ class InstitutionDropDown extends React.Component {
       //fetch( 'http://swapi.co/api/people/?format=json' ).then( response => response.json() ).then( ({results: items}) => {this.setState({colleges})} )
   }
   handleChange = (event, index, value) => this.setState({institutionType: value, institution: '-'});
-  selectSchool = (event, index, value) => this.setState({institution: value});
+  handleChange = name => event => {
+    this.setState({ [name]: event.target.value, institution: '-' });
+  };
+  selectSchool = name => event => {
+    this.setState({ [name]: event.target.value });
+  };
   render() {
     return (
       <div>
-      <SelectField floatingLabelText="Institution" value={this.state.institutionType} onChange={this.handleChange} style={style.textfield}>
-        <MenuItem value={'---'} primaryText="Please select one" />
-        <MenuItem value={'University'} primaryText="University" />
-        <MenuItem value={'College'} primaryText="College" />
-        <MenuItem value={'High School'} primaryText="High School" />
-      </SelectField>
-
+      <FormControl style={style.formControl}>
+        <InputLabel htmlFor="institution">Institution</InputLabel>
+        <Select
+          input={<Input id="institution" />}
+          value={this.state.institutionType}
+          onChange={this.handleChange('institutionType')}
+          style={style.textfield}>
+          <MenuItem value={'---'} >Please select one</MenuItem>
+          <MenuItem value={'University'} >University</MenuItem>
+          <MenuItem value={'College'} >College</MenuItem>
+          <MenuItem value={'High School'} >High School</MenuItem>
+        </Select>
+      </FormControl>
       {(() => {
        switch (this.state.institutionType) {
          case "University":   return (
-           <SelectField floatingLabelText="University" value={this.state.institution} onChange={this.selectSchool} style={style.textfield}>
-             <MenuItem value={'-'} primaryText="Please make a selection" />
-             <MenuItem value={'University of Ottawa'} primaryText="University of Ottawa" />
-           </SelectField>
+           <FormControl style={style.formControl}>
+             <InputLabel htmlFor="university">University</InputLabel>
+             <Select value={this.state.institution} onChange={this.selectSchool('institution')} style={style.textfield} input={<Input id="university" />}>
+               <MenuItem value={'-'} >Please make a selection</MenuItem>
+               <MenuItem value={'University of Ottawa'} >University of Ottawa</MenuItem>
+             </Select>
+           </FormControl>
          );
          case "College": return (
-           <SelectField floatingLabelText="College" value={this.state.institution} onChange={this.selectSchool} style={style.textfield}>
-             <MenuItem value={'-'} primaryText="Please make a selection" />
-             <MenuItem value={'Algonquin College'} primaryText="Algonquin College" />
-           </SelectField>
+           <FormControl style={style.formControl}>
+           <InputLabel htmlFor="college">College</InputLabel>
+           <Select value={this.state.institution} onChange={this.selectSchool('institution')} style={style.textfield} input={<Input id="college" />}>
+             <MenuItem value={'-'} >Please make a selection</MenuItem>
+             <MenuItem value={'Algonquin College'} >Algonquin College</MenuItem>
+           </Select>
+           </FormControl>
          );
          case "High School":  return (
-           <TextField style={style.textfield} floatingLabelText="High School" />
+           <TextField id="highschool" label="High School" style={style.textfield}/>
          );
          default:      return;
        }
@@ -172,18 +195,21 @@ class DepartmentDropDown extends React.Component {
     super();
     this.state = {department: '-'}
   }
-  update = (event, index, value) => this.setState({department: value});
+  update = name => event => {
+    this.setState({ [name]: event.target.value });
+  };
   componentWillMount(){
     //fetch( 'http://swapi.co/api/people/?format=json' ).then( response => response.json() ).then( ({results: items}) => {this.setState({universities})} )     will eventually get the selected list for people
   }
   render(){
     return(
-      <div>
-        <SelectField floatingLabelText="Department" value={this.state.department} onChange={this.update} style={style.textfield}>
-          <MenuItem value={'-'} primaryText="Please make a selection" />
-          <MenuItem value={'TBS'} primaryText="Treasury Board of Canada Secretariat" />
-        </SelectField>
-      </div>
+      <FormControl style={style.formControl}>
+        <InputLabel htmlFor="department">Department</InputLabel>
+        <Select value={this.state.department} onChange={this.update('department')} style={style.textfield} input={<Input id="department" />}>
+          <MenuItem value={'-'} >Please make a selection</MenuItem>
+          <MenuItem value={'TBS'} >Treasury Board of Canada Secretariat</MenuItem>
+        </Select>
+      </FormControl>
     )
   }
 }
@@ -197,43 +223,50 @@ class ProvincialDropDown extends React.Component {
       ministries: []
     }
   }
-  selectProvince = (event, index, value) => this.setState({province: value, ministry: '-'})
-  selectMinistry = (event, index, value) => this.setState({ministry: value})
+  selectProvince = name => event => {
+    this.setState({ [name]: event.target.value, ministry: '-' });
+  };
+  selectMinistry = name => event => {
+    this.setState({ [name]: event.target.value });
+  };
   componentWillMount(){
     //will have to read province and get the ministry
     fetch( 'https://swapi.co/api/starships/' ).then( response => response.json() ).then( ({results: items}) => {this.setState({ministries: items})} )
   }
   render(){
     let items = this.state.ministries
-    console.log(items);
-    console.log(this.state.province);
     return(
-      <div>
-        <SelectField floatingLabelText="Province/Territory" value={this.state.province} onChange={this.selectProvince} style={style.textfield}>
-          <MenuItem value={'--'} primaryText="Please make a selection" />
-          <MenuItem value={'AB'} primaryText="Alberta" />
-          <MenuItem value={'BC'} primaryText="British Columbia" />
-          <MenuItem value={'MB'} primaryText="Manitoba" />
-          <MenuItem value={'NB'} primaryText="New Brunswick" />
-          <MenuItem value={'NL'} primaryText="Newfoundland and Labrador" />
-          <MenuItem value={'NS'} primaryText="Northwest Territories" />
-          <MenuItem value={'NT'} primaryText="Nova Scotia" />
-          <MenuItem value={'NU'} primaryText="Nunavut" />
-          <MenuItem value={'ON'} primaryText="Ontario" />
-          <MenuItem value={'PE'} primaryText="Prince Edward Island" />
-          <MenuItem value={'QC'} primaryText="Quebec" />
-          <MenuItem value={'SK'} primaryText="Saskatchewan" />
-          <MenuItem value={'YT'} primaryText="Yukon" />
-        </SelectField>
+      <FormControl style={style.formControl}>
+        <InputLabel htmlFor="provincial">Province/Territory</InputLabel>
+        <Select value={this.state.province} onChange={this.selectProvince('province')} style={style.textfield} input={<Input id="provincial" />}>
+          <MenuItem value={'--'} >Please make a selection</MenuItem>
+          <MenuItem value={'AB'} >Alberta</MenuItem>
+          <MenuItem value={'BC'} >British Columbia</MenuItem>
+          <MenuItem value={'MB'} >Manitoba</MenuItem>
+          <MenuItem value={'NB'} >New Brunswick</MenuItem>
+          <MenuItem value={'NL'} >Newfoundland and Labrador</MenuItem>
+          <MenuItem value={'NS'} >Northwest Territories</MenuItem>
+          <MenuItem value={'NT'} >Nova Scotia</MenuItem>
+          <MenuItem value={'NU'} >Nunavut</MenuItem>
+          <MenuItem value={'ON'} >Ontario</MenuItem>
+          <MenuItem value={'PE'} >Prince Edward Island</MenuItem>
+          <MenuItem value={'QC'} >Quebec</MenuItem>
+          <MenuItem value={'SK'} >Saskatchewan</MenuItem>
+          <MenuItem value={'YT'} >Yukon</MenuItem>>
+        </Select>
 
-        {this.state.province != '--' &&
-        <SelectField floatingLabelText="Ministry" value={this.state.ministry} onChange={this.selectMinistry} style={style.textfield}>
-          <MenuItem value={'-'} primaryText="Please make a selection" />
-          {items.map(item =>
-            <MenuItem value={item.name} primaryText={item.name} />)} //will change to etter thign later
-        </SelectField>
+        {this.state.province !== '--' &&
+        <FormControl style={style.formControl}>
+          <InputLabel htmlFor="ministry">Ministry</InputLabel>
+          <Select value={this.state.ministry} onChange={this.selectMinistry('ministry')} style={style.textfield} input={<Input id="ministry" />}>
+            <MenuItem value={'-'} >Please make a selection</MenuItem>
+            {items.map(item =>
+              <MenuItem value={item.name}>{item.name}</MenuItem>
+            )}
+          </Select>
+        </FormControl>
         }
-      </div>
+      </FormControl>
     )
   }
 }
@@ -245,77 +278,36 @@ class MunicipalDropDown extends React.Component {
       province: '--'
     }
   }
-  selectProvince = (event, index, value) => this.setState({province: value});
+  selectProvince = name => event => {
+    this.setState({ [name]: event.target.value });
+  };
   render(){
     return(
-      <div>
-        <SelectField floatingLabelText="Province/Territory" value={this.state.province} onChange={this.selectProvince} style={style.textfield}>
-          <MenuItem value={'--'} primaryText="Please make a selection" />
-          <MenuItem value={'AB'} primaryText="Alberta" />
-          <MenuItem value={'BC'} primaryText="British Columbia" />
-          <MenuItem value={'MB'} primaryText="Manitoba" />
-          <MenuItem value={'NB'} primaryText="New Brunswick" />
-          <MenuItem value={'NL'} primaryText="Newfoundland and Labrador" />
-          <MenuItem value={'NS'} primaryText="Northwest Territories" />
-          <MenuItem value={'NT'} primaryText="Nova Scotia" />
-          <MenuItem value={'NU'} primaryText="Nunavut" />
-          <MenuItem value={'ON'} primaryText="Ontario" />
-          <MenuItem value={'PE'} primaryText="Prince Edward Island" />
-          <MenuItem value={'QC'} primaryText="Quebec" />
-          <MenuItem value={'SK'} primaryText="Saskatchewan" />
-          <MenuItem value={'YT'} primaryText="Yukon" />
-        </SelectField>
+      <FormControl style={style.formControl}>
+        <InputLabel htmlFor="municipal">Municipal</InputLabel>
+        <Select value={this.state.province} onChange={this.selectProvince('province')} style={style.textfield} input={<Input id="municipal" />}>
+        <MenuItem value={'--'} >Please make a selection</MenuItem>
+        <MenuItem value={'AB'} >Alberta</MenuItem>
+        <MenuItem value={'BC'} >British Columbia</MenuItem>
+        <MenuItem value={'MB'} >Manitoba</MenuItem>
+        <MenuItem value={'NB'} >New Brunswick</MenuItem>
+        <MenuItem value={'NL'} >Newfoundland and Labrador</MenuItem>
+        <MenuItem value={'NS'} >Northwest Territories</MenuItem>
+        <MenuItem value={'NT'} >Nova Scotia</MenuItem>
+        <MenuItem value={'NU'} >Nunavut</MenuItem>
+        <MenuItem value={'ON'} >Ontario</MenuItem>
+        <MenuItem value={'PE'} >Prince Edward Island</MenuItem>
+        <MenuItem value={'QC'} >Quebec</MenuItem>
+        <MenuItem value={'SK'} >Saskatchewan</MenuItem>
+        <MenuItem value={'YT'} >Yukon</MenuItem>>
+        </Select>
 
-        {this.state.province != '--' &&
-          <TextField style={style.textfield} floatingLabelText="City" />
+        {this.state.province !== '--' &&
+          <TextField id="city" label="City" style={style.textfield} />
         }
-      </div>
+      </FormControl>
     )
   }
 }
 
 export default Register;
-
-
-
-/*
-{this.state.institutionType != '---' &&
-  <p>red</p>
-}
-const organizationTextField = (
-  <TextField style={style.textfield} floatingLabelText="Organization" />
-)
-
-const InstitutionDropDown = (props) =>
-  <SelectField floatingLabelText="Institution" style={style.textfield}>
-    <MenuItem value={'University'} primaryText="University" />
-    <MenuItem value={'College'} primaryText="College" />
-  </SelectField>
-
-
-const provinceDropDown = (
-  <SelectField floatingLabelText="Province/Territory" style={style.textfield}>
-    <MenuItem value={'Ontario'} primaryText="Ontario" />
-    <MenuItem value={'Quebec'} primaryText="Quebec" />
-    <MenuItem value={'PEI'} primaryText="Prince Edward Island" />
-  </SelectField>
-)
-
-const departmentDropDown = (
-  <SelectField floatingLabelText="Department" style={style.textfield}>
-    <MenuItem value={'TBS'} primaryText="Treasury Board of Canada" />
-  </SelectField>
-)
-
-3: [departmentDropDown],
-4: [provinceDropDown],
-5: [provinceDropDown],
-6: [organizationTextField],
-7: [organizationTextField],
-8: [organizationTextField],
-9: [organizationTextField],
-10: [organizationTextField],
-11: [departmentDropDown],
-12: [organizationTextField],
-
-*/
